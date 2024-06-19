@@ -14,12 +14,14 @@ def config():
             ['U', 'update_all_plugins', 'Update all plugins'],
             ['t', 'toggle_autoupdate', 'Toggle Autoupdate'],
             ['v', 'verify_plugin', 'Verify plugin agains wp.org']
+            ['V', 'verify_all_plugins', 'Verify all plugins agains wp.org']
         ],
         'statusbar': [
             'a: de/active',
             'i: install',
             'r: remove',
             'u: update (U: all)',
+            'v: verify (V: all)',
         ]
     }
 
@@ -188,4 +190,34 @@ def toggle_autoupdate(lazywp, data):
 
 
 def verify_plugin(lazywp, data):
+    '''
+    Verifies  plugin checkums against Wordpress.org database
+
+    Parameters:
+        lazywp (obj): the lazywp object
+        data (dict): the transfer data dict
+
+    Returns:
+        void
+    '''
     lazywp.log.debug('verify_plugin')
+    lazywp.reload_content = True
+    lazywp.msgbox([f"Verifying plugin {data['active_plugin']['name']}"])
+    lazywp.wp(f"plugin verify-checksums {data['active_plugin']['name']}", False)
+
+def verify_all_plugins(lazywp, data):
+    '''
+    Verifies  all plugins checkums against Wordpress.org database
+
+    Parameters:
+        lazywp (obj): the lazywp object
+        data (dict): the transfer data dict
+
+    Returns:
+        void
+    '''
+    lazywp.log.debug('verify_iall_plugins')
+    lazywp.reload_content = True
+    lazywp.msgbox([f"Verifying all plugins checksums"])
+    lazywp.wp(f"plugin verify-checksums --all", False)
+
